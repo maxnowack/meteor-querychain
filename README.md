@@ -1,18 +1,20 @@
 # QueryChain
-This package enables chaining mongo cursors for Meteor
+This package enables chaining mongo cursors like this:
+````javascript
+Posts.find().fromMax().withComments()
+````
 
 ## Installation
 ````
-meteor add maxnowack:query-chain
+meteor add maxnowack:querychain
 ````
 
 ## Usage
 
-First add a chain method
-
 ````javascript
 Posts = new Mongo.Collection('posts');
 
+// add a chain method
 QueryChain.add({
   name: 'withoutComments', // name of the method
   query: { // a mongo query
