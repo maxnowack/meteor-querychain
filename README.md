@@ -25,6 +25,17 @@ QueryChain.add({
   }
 });
 
+// it's also possible, to define a function to provide a query
+QueryChain.add({
+  from: {
+    query: function(name){
+      return {
+        author: name
+      }
+    }
+  }
+});
+
 Posts.find().withComments() // returns a cursor for the query speficied above
 
 // you can also chain multiple methods:
