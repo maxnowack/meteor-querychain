@@ -1,6 +1,6 @@
 Package.describe({
   name: 'maxnowack:querychain',
-  version: '0.1.0',
+  version: '0.2.0',
   summary: 'This package enables chaining mongo cursors for Meteor',
   git: 'https://github.com/maxnowack/meteor-querychain/'
 });
