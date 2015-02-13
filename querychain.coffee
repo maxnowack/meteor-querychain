@@ -14,7 +14,11 @@ class QueryChain
       options.limit = @limit if @limit?
       options.skip = @skip if @skip?
 
-      query = _.extend @matcher._selector, config.query
+      if typeof config.query is 'function'
+        result = config.query.apply @, _.toArray(arguments)
+        query = _.extend @matcher._selector, result
+      else
+        query = _.extend @matcher._selector, config.query
       options = _.extend options, config.options
 
       @collection.find query, options
