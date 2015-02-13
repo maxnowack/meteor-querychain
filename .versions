@@ -10,9 +10,9 @@ follower-livedata@1.0.3
 geojson-utils@1.0.2
 id-map@1.0.2
 json@1.0.2
-local-test:maxnowack:querychain@0.1.0
+local-test:maxnowack:querychain@0.3.0
 logging@1.0.6
-maxnowack:querychain@0.1.0
+maxnowack:querychain@0.3.0
 meteor@1.1.4
 minimongo@1.0.6
 mongo@1.0.11
