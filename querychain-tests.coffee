@@ -10,10 +10,10 @@ Tinytest.add 'QueryChain - simple query', (test) ->
     comments: 5
 
   QueryChain.add
-    name: 'withComments'
-    query:
-      comments:
-        $gt: 0
+    withComments:
+      query:
+        comments:
+          $gt: 0
 
   result = posts.find().withComments().fetch()
 
@@ -35,17 +35,48 @@ Tinytest.add 'QueryChain - simple chained query', (test) ->
     author: "not Max"
 
   QueryChain.add
-    name: 'withComments'
-    query:
-      comments:
-        $gt: 0
-
-  QueryChain.add
-    name: 'fromMax'
-    query:
-      author: "Max"
+    withComments:
+      query:
+        comments:
+          $gt: 0
+    fromMax:
+      query:
+        author: "Max"
 
   result = posts.find().withComments().fromMax()
 
   test.equal result.count(), 0
+  QueryChain.reset()
+
+Tinytest.add 'QueryChain - simple query on specific collection', (test) ->
+  posts = new Mongo.Collection null
+  notPosts = new Mongo.Collection null
+
+  posts.insert
+    name: 'Post 1'
+    comments: 0
+
+  posts.insert
+    name: 'Post 2'
+    comments: 5
+
+  QueryChain.add
+    withComments:
+      collection: posts
+      query:
+        comments:
+          $gt: 0
+
+  failed = false
+  result = posts.find().withComments().fetch()
+
+  try
+    notPosts.find().withComments()
+  catch e
+    failed = true
+
+
+  test.equal result.length, 1
+  test.equal result[0].comments, 5
+  test.isTrue failed
   QueryChain.reset()

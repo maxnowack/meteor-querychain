@@ -5,7 +5,8 @@ class QueryChain
     ->
       config = (chain for chain in chains when chain.name is name)[0]
 
-      if config.collection? and config.collection isnt @collection.name
+      collection = config.collection?._collection or config.collection
+      if collection? and collection isnt @collection
         throw new Error "QueryChain '#{name}' is not allowed on collection '#{@collection.name}'"
 
       options = {}
@@ -18,22 +19,22 @@ class QueryChain
 
       @collection.find query, options
 
-  @add: (options) ->
-    defaultOptions =
-      collection: null
-      query: {}
-      options: {}
+  @add: (params) ->
+    for key, options of params
+      options.name = key
+      defaultOptions =
+        collection: null
+        query: {}
+        options: {}
 
-    _.extend defaultOptions, options
+      _.extend defaultOptions, options
 
-    throw new Error("QueryChain name is required") unless options.name
+      for chain in chains when chain.name is options.name
+        throw new Error("QueryChain '#{chain.name}' is already defined")
 
-    for chain in chains when chain.name is options.name
-      throw new Error("QueryChain '#{chain.name}' is already defined")
+      chains.push options
 
-    chains.push options
-
-    Mongo.Cursor.prototype[options.name] = @_chain options.name
+      Mongo.Cursor.prototype[options.name] = @_chain options.name
 
 
   @reset: ->
